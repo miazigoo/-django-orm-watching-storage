@@ -45,15 +45,14 @@ class Visit(models.Model):
 
     def format_duration(self):
         """Формат полученного времени нахождения в хранилище"""
-        duration = str(self.get_duration()).split(":")
-        return f'{duration[0]} ч  {duration[1]} мин'
+        duration_seconds = self.get_duration().total_seconds()
+        hours = int(duration_seconds // 3600)
+        minutes = int((duration_seconds % 3600) // 60)
+        return f'{hours}ч  {minutes}мин'
 
     def is_visit_long(self, minutes=10):
         """Подозрителен ли?"""
         sec = minutes * 60
-        minuts = datetime.timedelta(seconds=sec)
+        comparison_time = datetime.timedelta(seconds=sec)
         duration = self.get_duration()
-        if duration > minuts:
-            return True
-        else:
-            return False
+        return duration > comparison_time
