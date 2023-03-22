@@ -52,7 +52,6 @@ class Visit(models.Model):
 
     def is_visit_long(self, minutes=10):
         """Подозрителен ли?"""
-        sec = minutes * 60
-        comparison_time = datetime.timedelta(seconds=sec)
+        comparison_time = datetime.timedelta(minutes=minutes)
         duration = self.get_duration()
         return duration > comparison_time
